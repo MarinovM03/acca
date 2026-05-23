@@ -1,0 +1,57 @@
+# --- Environment ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- Python / FastAPI backend ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+*.egg-info/
+build/
+dist/
+
+# --- Node / Angular frontend ---
+node_modules/
+client/dist/
+client/.angular/
+client/coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Local-only project notes ---
+CLAUDE.md
+.claude/
+
+# --- Docker volumes (only matters if anyone ever points one at the repo) ---
+postgres-data/
+redis-data/

@@ -1,0 +1,50 @@
+# =============================================================================
+# Acca — Local development dependencies
+# =============================================================================
+# Per CLAUDE.md: we do NOT dockerise the app code during development.
+# Only Postgres and Redis run here. The backend and frontend run on the host.
+#
+# Usage (from repo root):
+#   docker compose up -d        # start Postgres + Redis in the background
+#   docker compose ps           # check status
+#   docker compose logs -f      # tail logs
+#   docker compose down         # stop (keeps volumes)
+#   docker compose down -v      # stop and wipe data
+# =============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: acca-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-acca}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-acca_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-acca}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - acca-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-acca} -d ${POSTGRES_DB:-acca}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: acca-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - acca-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  acca-postgres-data:
+  acca-redis-data:
