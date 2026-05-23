@@ -1,0 +1,31 @@
+<main class="home">
+  <header class="home__header">
+    <h1>Acca</h1>
+    <p class="home__tagline">Track your accumulators in real time.</p>
+  </header>
+
+  <section class="home__status" aria-live="polite">
+    @let state = health();
+    @switch (state.kind) {
+      @case ('loading') {
+        <p class="status status--loading">Connecting to API…</p>
+      }
+      @case ('ok') {
+        @if (state.kind === 'ok') {
+          <p class="status status--ok">
+            API <strong>{{ state.data.service }}</strong>
+            v{{ state.data.version }} —
+            <span class="status__pill">{{ state.data.status }}</span>
+          </p>
+        }
+      }
+      @case ('error') {
+        @if (state.kind === 'error') {
+          <p class="status status--error">
+            Couldn't reach the API: {{ state.message }}
+          </p>
+        }
+      }
+    }
+  </section>
+</main>
