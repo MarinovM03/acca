@@ -130,7 +130,7 @@ Never commit `.env`. The `.gitignore` enforces this.
 
 ## Architecture and conventions
 
-See [`CLAUDE.md`](CLAUDE.md) for the full architecture brief, coding conventions, security expectations, and out-of-scope items for v1.
+Significant design decisions are recorded in [`docs/adr/`](docs/adr/README.md). Start with [ADR-0001](docs/adr/0001-stack-and-layered-architecture.md) for the stack and backend layering rationale.
 
 ---
 
