@@ -1,7 +1,20 @@
 <main class="fixtures">
   <header class="fixtures__header">
-    <h1>Premier League — today</h1>
-    <p class="fixtures__tagline">Upcoming and in-progress matches.</p>
+    <h1>{{ leagueName() }}</h1>
+    <div class="fixtures__controls">
+      <label class="fixtures__control">
+        <span>League</span>
+        <select [value]="selectedLeague()" (change)="onLeagueChange($event)">
+          @for (league of leagues; track league.id) {
+            <option [value]="league.id">{{ league.name }}</option>
+          }
+        </select>
+      </label>
+      <label class="fixtures__control">
+        <span>Date</span>
+        <input type="date" [value]="selectedDate()" (change)="onDateChange($event)" />
+      </label>
+    </div>
   </header>
 
   @let current = state();
@@ -16,7 +29,7 @@
     }
     @case ('loaded') {
       @if (current.fixtures.length === 0) {
-        <p class="fixtures__status">No Premier League matches scheduled for today.</p>
+        <p class="fixtures__status">No Premier League matches on this date.</p>
       } @else {
         <ul class="fixtures__list">
           @for (fixture of current.fixtures; track fixture.id) {
