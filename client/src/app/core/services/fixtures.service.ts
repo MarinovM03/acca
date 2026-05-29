@@ -21,7 +21,7 @@ export type FixtureStatus = 'scheduled' | 'live' | 'finished' | 'postponed' | 'c
 
 export interface Fixture {
   id: number;
-  api_football_id: number;
+  external_id: number;
   league: FixtureLeague;
   home_team: FixtureTeam;
   away_team: FixtureTeam;
@@ -36,8 +36,8 @@ export class FixturesService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiBaseUrl;
 
-  list(leagueId: number, date?: string): Observable<Fixture[]> {
-    let params = new HttpParams().set('league_id', leagueId);
+  list(competitionId: number, date?: string): Observable<Fixture[]> {
+    let params = new HttpParams().set('competition_id', competitionId);
     if (date) {
       params = params.set('date', date);
     }
