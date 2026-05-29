@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { provideRouter } from '@angular/router';
 
 import { Home } from './home';
 import { AuthService, User } from '../../core/services/auth.service';
@@ -15,6 +16,7 @@ describe('Home', () => {
     TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideRouter([]),
         {
           provide: AuthService,
           useValue: { user: signal(user).asReadonly() },
