@@ -1,8 +1,24 @@
 <main class="fixtures">
   <header class="fixtures__header">
-    <h1>Premier League — today</h1>
-    <p class="fixtures__tagline">Upcoming and in-progress matches.</p>
+    <h1>{{ leagueName() }}</h1>
+    <label class="fixtures__control">
+      <span>Date</span>
+      <input type="date" [value]="selectedDate()" (change)="onDateChange($event)" />
+    </label>
   </header>
+
+  <nav class="league-tabs" aria-label="Leagues">
+    @for (league of leagues; track league.id) {
+      <button
+        type="button"
+        class="league-tabs__tab"
+        [class.league-tabs__tab--active]="league.id === selectedLeague()"
+        (click)="selectLeague(league.id)"
+      >
+        {{ league.name }}
+      </button>
+    }
+  </nav>
 
   @let current = state();
   @switch (current.kind) {
@@ -16,7 +32,7 @@
     }
     @case ('loaded') {
       @if (current.fixtures.length === 0) {
-        <p class="fixtures__status">No Premier League matches scheduled for today.</p>
+        <p class="fixtures__status">No Premier League matches on this date.</p>
       } @else {
         <ul class="fixtures__list">
           @for (fixture of current.fixtures; track fixture.id) {

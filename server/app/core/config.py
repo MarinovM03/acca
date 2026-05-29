@@ -32,8 +32,8 @@ class Settings(BaseSettings):
 
     cors_origins: str = Field(default="http://localhost:4200")
 
-    api_football_key: str = Field(default="")
-    api_football_base_url: str = Field(default="https://v3.football.api-sports.io")
+    football_data_api_key: str = Field(default="")
+    football_data_base_url: str = Field(default="https://api.football-data.org/v4")
 
     @computed_field  # type: ignore[prop-decorator]
     @property
