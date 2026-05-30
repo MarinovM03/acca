@@ -6,7 +6,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.core.config import get_settings
-from app.routers import auth, bets, fixtures, health
+from app.routers import auth, bets, competitions, fixtures, health
 
 
 def configure_logging(level: str) -> None:
@@ -40,6 +40,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router)
     app.include_router(fixtures.router)
     app.include_router(bets.router)
+    app.include_router(competitions.router)
 
     logging.getLogger(__name__).info(
         "Acca API started in %s mode (CORS origins: %s)",
