@@ -71,6 +71,56 @@ class ParsedFixture(BaseModel):
     away_goals: int | None
 
 
+class StandingRow(BaseModel):
+    position: int
+    team: ParsedTeam
+    played: int
+    won: int
+    draw: int
+    lost: int
+    goals_for: int
+    goals_against: int
+    goal_difference: int
+    points: int
+
+
+class StandingsGroup(BaseModel):
+    label: str | None
+    table: list[StandingRow]
+
+
+class ScorerRow(BaseModel):
+    player_id: int
+    player_name: str
+    nationality: str | None
+    team_name: str | None
+    team_crest: str | None
+    goals: int | None
+    assists: int | None
+    played_matches: int | None
+
+
+class SquadPlayer(BaseModel):
+    id: int
+    name: str
+    position: str | None
+    date_of_birth: str | None
+    nationality: str | None
+
+
+class TeamDetail(BaseModel):
+    id: int
+    name: str
+    crest: str | None
+    country: str | None
+    founded: int | None
+    club_colors: str | None
+    venue: str | None
+    website: str | None
+    coach_name: str | None
+    squad: list[SquadPlayer]
+
+
 class FootballDataClient:
     def __init__(
         self,
@@ -99,19 +149,106 @@ class FootballDataClient:
     ) -> list[ParsedFixture]:
         if not self._api_key:
             return []
-
         iso_date = match_date.isoformat()
-        response = await self._client.get(
-            f"{self._base_url}/competitions/{competition_id}/matches",
+        data = await self._get_json(
+            f"/competitions/{competition_id}/matches",
             params={"dateFrom": iso_date, "dateTo": iso_date},
+        )
+        body = _MatchesResponse.model_validate(data)
+        return [self._normalise(body.competition, match) for match in body.matches]
+
+    async def standings(self, *, competition_id: int) -> list[StandingsGroup]:
+        if not self._api_key:
+            return []
+        data = await self._get_json(f"/competitions/{competition_id}/standings")
+        groups: list[StandingsGroup] = []
+        for entry in data.get("standings", []):
+            if entry.get("type") != "TOTAL":
+                continue
+            rows = [self._standing_row(row) for row in entry.get("table", [])]
+            groups.append(StandingsGroup(label=entry.get("group"), table=rows))
+        return groups
+
+    async def scorers(self, *, competition_id: int) -> list[ScorerRow]:
+        if not self._api_key:
+            return []
+        data = await self._get_json(f"/competitions/{competition_id}/scorers")
+        return [self._scorer_row(item) for item in data.get("scorers", [])]
+
+    async def team(self, *, team_id: int) -> TeamDetail | None:
+        if not self._api_key:
+            return None
+        data = await self._get_json(f"/teams/{team_id}")
+        coach = data.get("coach") or {}
+        area = data.get("area") or {}
+        squad = [
+            SquadPlayer(
+                id=player.get("id", 0),
+                name=player.get("name", "Unknown"),
+                position=player.get("position"),
+                date_of_birth=player.get("dateOfBirth"),
+                nationality=player.get("nationality"),
+            )
+            for player in data.get("squad", [])
+        ]
+        return TeamDetail(
+            id=data.get("id", team_id),
+            name=data.get("name", "Unknown"),
+            crest=data.get("crest"),
+            country=area.get("name"),
+            founded=data.get("founded"),
+            club_colors=data.get("clubColors"),
+            venue=data.get("venue"),
+            website=data.get("website"),
+            coach_name=coach.get("name"),
+            squad=squad,
+        )
+
+    async def _get_json(self, path: str, params: dict | None = None) -> dict:
+        response = await self._client.get(
+            f"{self._base_url}{path}",
+            params=params,
             headers={"X-Auth-Token": self._api_key},
         )
         if response.status_code != 200:
             message = self._extract_message(response)
             raise FootballDataError(f"football-data.org HTTP {response.status_code}: {message}")
+        return response.json()
 
-        body = _MatchesResponse.model_validate(response.json())
-        return [self._normalise(body.competition, match) for match in body.matches]
+    @staticmethod
+    def _standing_row(row: dict) -> StandingRow:
+        team = row.get("team", {})
+        return StandingRow(
+            position=row.get("position", 0),
+            team=ParsedTeam(
+                external_id=team.get("id", 0),
+                name=team.get("name", "Unknown"),
+                logo_url=team.get("crest"),
+            ),
+            played=row.get("playedGames", 0),
+            won=row.get("won", 0),
+            draw=row.get("draw", 0),
+            lost=row.get("lost", 0),
+            goals_for=row.get("goalsFor", 0),
+            goals_against=row.get("goalsAgainst", 0),
+            goal_difference=row.get("goalDifference", 0),
+            points=row.get("points", 0),
+        )
+
+    @staticmethod
+    def _scorer_row(item: dict) -> ScorerRow:
+        player = item.get("player", {})
+        team = item.get("team", {})
+        return ScorerRow(
+            player_id=player.get("id", 0),
+            player_name=player.get("name", "Unknown"),
+            nationality=player.get("nationality"),
+            team_name=team.get("name"),
+            team_crest=team.get("crest"),
+            goals=item.get("goals"),
+            assists=item.get("assists"),
+            played_matches=item.get("playedMatches"),
+        )
 
     @staticmethod
     def _extract_message(response: httpx.Response) -> str:
