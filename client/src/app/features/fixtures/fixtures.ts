@@ -139,20 +139,18 @@ export class Fixtures implements OnInit {
     const source =
       league === ALL_ID
         ? this.fixturesService.listGroupedByDate(date)
-        : this.fixturesService
-            .list(league, date)
-            .pipe(
-              map((fixtures) =>
-                fixtures.length
-                  ? [
-                      {
-                        competition: { id: league, name: competitionName(league), emblem: '' },
-                        fixtures,
-                      },
-                    ]
-                  : [],
-              ),
-            );
+        : this.fixturesService.list(league, date).pipe(
+            map((fixtures) =>
+              fixtures.length
+                ? [
+                    {
+                      competition: { id: league, name: competitionName(league), emblem: '' },
+                      fixtures,
+                    },
+                  ]
+                : [],
+            ),
+          );
 
     source.subscribe({
       next: (groups) => this.state.set({ kind: 'loaded', groups }),
