@@ -25,7 +25,7 @@ CurrentUserDep = Annotated[User, Depends(get_current_user)]
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-REFRESH_COOKIE_NAME = "acca_refresh"
+REFRESH_COOKIE_NAME = "zenith_refresh"
 
 
 def _set_refresh_cookie(response: Response, refresh_token: str) -> None:

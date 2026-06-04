@@ -78,7 +78,7 @@ class TestLogin:
         body = response.json()
         assert body["token_type"] == "bearer"
         assert body["access_token"]
-        assert "acca_refresh" in response.cookies
+        assert "zenith_refresh" in response.cookies
 
     @pytest.mark.asyncio
     async def test_wrong_password_returns_401(self, client: AsyncClient) -> None:
@@ -121,7 +121,7 @@ class TestMe:
     async def test_refresh_token_rejected_as_access(self, client: AsyncClient) -> None:
         await _register(client)
         await _login(client)
-        refresh_cookie = client.cookies.get("acca_refresh")
+        refresh_cookie = client.cookies.get("zenith_refresh")
         assert refresh_cookie is not None
         response = await client.get(
             "/auth/me", headers={"Authorization": f"Bearer {refresh_cookie}"}
@@ -164,8 +164,8 @@ class TestLogout:
     async def test_clears_refresh_cookie(self, client: AsyncClient) -> None:
         await _register(client)
         await _login(client)
-        assert client.cookies.get("acca_refresh") is not None
+        assert client.cookies.get("zenith_refresh") is not None
         response = await client.post("/auth/logout")
         assert response.status_code == 204
         set_cookie = response.headers.get("set-cookie", "")
-        assert "acca_refresh=" in set_cookie
+        assert "zenith_refresh=" in set_cookie

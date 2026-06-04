@@ -1,6 +1,6 @@
 # Zenith
 
-A space-exploration discovery app — NASA's Astronomy Picture of the Day, rocket launches with live countdowns, Mars rover photography, and near-Earth asteroids. Built as an installable PWA with Angular 21, FastAPI, PostgreSQL, and Redis.
+A space-exploration discovery app — NASA's Astronomy Picture of the Day, rocket launches with live countdowns, Mars rover photography, and near-Earth asteroids. Built with Angular 21, FastAPI, PostgreSQL, and Redis, and installable as a PWA.
 
 > Pivoted from an earlier football project; the git history shows that evolution.
 
@@ -29,7 +29,7 @@ docker compose up -d
 
 ### 2. Backend env file
 
-Create `server/.env` with the variables under [Environment variables](#environment-variables).
+Create `server/.env`. The required keys are defined in `server/app/core/config.py` — copy the field names from `Settings` there. Never commit this file.
 
 ### 3. Backend
 
@@ -88,33 +88,6 @@ docker compose up -d
 docker compose down        # stop, keep data
 docker compose down -v     # stop AND wipe data
 ```
-
----
-
-## Environment variables
-
-Source of truth is `server/app/core/config.py`. The frontend reads `client/src/environments/environment*.ts`.
-
-Required in `server/.env`:
-
-```
-POSTGRES_USER=zenith
-POSTGRES_PASSWORD=<choose one>
-POSTGRES_DB=zenith
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-JWT_SECRET=<long random string>
-
-CORS_ORIGINS=http://localhost:4200
-
-NASA_API_KEY=<your key from api.nasa.gov>
-```
-
-Never commit `.env`. `.gitignore` enforces this.
 
 ---
 

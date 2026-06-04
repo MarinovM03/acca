@@ -12,4 +12,4 @@ class HealthResponse(BaseModel):
 
 @router.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
-    return HealthResponse(status="ok", service="acca-server", version="0.1.0")
+    return HealthResponse(status="ok", service="zenith-server", version="0.1.0")
