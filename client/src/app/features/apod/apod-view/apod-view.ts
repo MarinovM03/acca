@@ -74,13 +74,27 @@ export class ApodView {
       .getByDate(date)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (apod) => this.state.set({ status: 'ready', apod }),
+        next: (apod) => {
+          this.state.set({ status: 'ready', apod });
+          this.prefetchAdjacent();
+        },
         error: () =>
           this.state.set({
             status: 'error',
             message: "Couldn't load this picture. Try again.",
           }),
       });
+  }
+
+  private prefetchAdjacent(): void {
+    for (const date of [this.prevDate(), this.nextDate()]) {
+      if (date) {
+        this.service
+          .getByDate(date)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({ error: () => undefined });
+      }
+    }
   }
 
   protected onDateInput(value: string): void {
