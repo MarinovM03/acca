@@ -22,6 +22,7 @@
           @if (s.apod.media_type === 'image') {
             <img
               class="apod__image"
+              appImgFade
               [src]="s.apod.url"
               [alt]="s.apod.title"
               loading="eager"

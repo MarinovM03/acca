@@ -5,7 +5,7 @@
         @case ('ready') {
           <a class="hero__media" routerLink="/apod" aria-label="Open today's picture">
             @if (heroImage(h.apod); as img) {
-              <img class="hero__img" [src]="img" [alt]="h.apod.title" decoding="async" />
+              <img class="hero__img" appImgFade [src]="img" [alt]="h.apod.title" decoding="async" />
             }
             <div class="hero__scrim"></div>
             <div class="hero__content">

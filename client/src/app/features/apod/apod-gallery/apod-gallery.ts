@@ -9,6 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 
+import { ImgFade } from '../../../shared/img-fade/img-fade';
 import { Skeleton } from '../../../shared/skeleton/skeleton';
 import { Apod, APOD_EPOCH, shiftDate, todayIso } from '../apod.model';
 import { ApodService } from '../apod.service';
@@ -19,7 +20,7 @@ const PAGE_DAYS = 30;
   selector: 'app-apod-gallery',
   templateUrl: './apod-gallery.html',
   styleUrl: './apod-gallery.css',
-  imports: [RouterLink, Skeleton],
+  imports: [RouterLink, Skeleton, ImgFade],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApodGallery {

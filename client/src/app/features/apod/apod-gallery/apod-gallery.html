@@ -39,7 +39,7 @@
         <a class="card" [routerLink]="['/apod', apod.date]">
           <span class="card__thumb">
             @if (thumb(apod); as src) {
-              <img [src]="src" [alt]="apod.title" loading="lazy" decoding="async" />
+              <img appImgFade [src]="src" [alt]="apod.title" loading="lazy" decoding="async" />
             } @else {
               <span class="card__noimg" aria-hidden="true">▦</span>
             }
