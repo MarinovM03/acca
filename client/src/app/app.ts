@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/services/auth.service';
+import { CosmicBackground } from './shared/cosmic-background/cosmic-background';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, CosmicBackground],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {

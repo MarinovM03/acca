@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = Field(default=7)
     cookie_secure: bool = Field(default=False)
 
-    cors_origins: str = Field(default="http://localhost:4200")
+    cors_origins: str = Field(default="http://localhost:4200,http://127.0.0.1:4200")
 
     nasa_api_key: str = Field(default="DEMO_KEY")
     nasa_base_url: str = Field(default="https://api.nasa.gov")
