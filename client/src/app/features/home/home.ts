@@ -58,8 +58,8 @@ export class Home {
     {
       title: 'Near-Earth Asteroids',
       description: 'Watch space rocks making their closest approaches to Earth.',
-      link: null,
-      soon: true,
+      link: '/asteroids',
+      soon: false,
       icon: 'asteroid',
     },
   ];

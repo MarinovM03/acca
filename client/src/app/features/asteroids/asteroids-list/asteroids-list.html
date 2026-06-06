@@ -1,0 +1,85 @@
+<main class="neo">
+  <header class="neo__head">
+    <div>
+      <h1 class="neo__title">Near-Earth Asteroids</h1>
+      <p class="neo__sub">Objects making close approaches over a 7-day window, closest first.</p>
+    </div>
+    <label class="neo__jump">
+      <span class="neo__jump-label">From date</span>
+      <input
+        type="date"
+        [value]="start()"
+        [max]="today"
+        (change)="onStart($any($event.target).value)"
+      />
+    </label>
+  </header>
+
+  @if (state(); as s) {
+    @switch (s.status) {
+      @case ('loading') {
+        <div class="neo__grid" role="status" aria-label="Loading asteroids">
+          @for (slot of skeletonSlots; track slot) {
+            <app-skeleton height="9rem" radius="var(--radius-lg)" />
+          }
+        </div>
+      }
+      @case ('error') {
+        <div class="neo__state" role="alert">
+          <p>Couldn't load the asteroid feed.</p>
+          <button type="button" class="neo__retry" (click)="retry()">Try again</button>
+        </div>
+      }
+      @case ('ready') {
+        @if (s.asteroids.length === 0) {
+          <div class="neo__state">
+            <p>No close approaches in this window.</p>
+          </div>
+        } @else {
+          <p class="neo__summary">
+            {{ s.asteroids.length }} objects ·
+            <span class="neo__summary-haz">{{ hazardousCount() }} potentially hazardous</span>
+          </p>
+          <div class="neo__grid">
+            @for (rock of s.asteroids; track rock.id) {
+              <article class="rock" [class.rock--hazard]="rock.hazardous">
+                <header class="rock__head">
+                  <h2 class="rock__name">{{ rock.name }}</h2>
+                  @if (rock.hazardous) {
+                    <span class="rock__badge">⚠ Hazardous</span>
+                  }
+                </header>
+                <dl class="rock__stats">
+                  <div>
+                    <dt>Size</dt>
+                    <dd>
+                      {{ rock.diameter_min_m | number: '1.0-0' }}–{{
+                        rock.diameter_max_m | number: '1.0-0'
+                      }}
+                      m
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Miss distance</dt>
+                    <dd>
+                      {{ rock.miss_distance_lunar | number: '1.1-1' }} LD ·
+                      {{ rock.miss_distance_km | number: '1.0-0' }} km
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Speed</dt>
+                    <dd>{{ rock.velocity_kps | number: '1.1-1' }} km/s</dd>
+                  </div>
+                  <div>
+                    <dt>Closest approach</dt>
+                    <dd>{{ rock.approach_date }}</dd>
+                  </div>
+                </dl>
+              </article>
+            }
+          </div>
+        }
+      }
+    }
+  }
+</main>
