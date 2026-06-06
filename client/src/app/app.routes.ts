@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { guestGuard } from './core/guards/auth.guard';
+import { authGuard, guestGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -45,6 +45,13 @@ export const routes: Routes = [
     pathMatch: 'full',
     loadComponent: () =>
       import('./features/asteroids/asteroids-list/asteroids-list').then((m) => m.AsteroidsList),
+  },
+  {
+    path: 'favourites',
+    pathMatch: 'full',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/favourites/favourites-page/favourites-page').then((m) => m.FavouritesPage),
   },
   {
     path: 'login',

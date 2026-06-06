@@ -1,0 +1,37 @@
+<main class="favs">
+  <header class="favs__head">
+    <h1 class="favs__title">Your favourites</h1>
+    <p class="favs__sub">Pictures and launches you've saved.</p>
+  </header>
+
+  @if (items().length === 0) {
+    <div class="favs__empty">
+      <p>Nothing saved yet.</p>
+      <p class="favs__empty-hint">
+        Tap <strong>Save</strong> on a <a routerLink="/apod">picture</a> or a
+        <a routerLink="/launches">launch</a> to keep it here.
+      </p>
+    </div>
+  } @else {
+    <div class="favs__grid">
+      @for (fav of items(); track fav.id) {
+        <article class="favcard">
+          <a class="favcard__main" [routerLink]="link(fav)">
+            <span class="favcard__thumb">
+              @if (image(fav); as img) {
+                <img appImgFade [src]="img" [alt]="title(fav)" loading="lazy" decoding="async" />
+              } @else {
+                <span class="favcard__noimg" aria-hidden="true">★</span>
+              }
+            </span>
+            <span class="favcard__body">
+              <span class="favcard__kind">{{ fav.kind }}</span>
+              <span class="favcard__title">{{ title(fav) }}</span>
+            </span>
+          </a>
+          <button type="button" class="favcard__remove" (click)="remove(fav)">Remove</button>
+        </article>
+      }
+    </div>
+  }
+</main>
