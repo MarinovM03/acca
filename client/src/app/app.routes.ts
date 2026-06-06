@@ -41,6 +41,12 @@ export const routes: Routes = [
       import('./features/mars/mars-gallery/mars-gallery').then((m) => m.MarsGallery),
   },
   {
+    path: 'asteroids',
+    pathMatch: 'full',
+    loadComponent: () =>
+      import('./features/asteroids/asteroids-list/asteroids-list').then((m) => m.AsteroidsList),
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
