@@ -227,8 +227,8 @@ export class CosmicBackground {
       const tailX = comet.x - comet.vx * 7;
       const tailY = comet.y - comet.vy * 7;
       const gradient = ctx.createLinearGradient(comet.x, comet.y, tailX, tailY);
-      gradient.addColorStop(0, `rgba(182, 242, 58, ${0.9 * fade})`);
-      gradient.addColorStop(1, 'rgba(182, 242, 58, 0)');
+      gradient.addColorStop(0, `rgba(168, 85, 247, ${0.9 * fade})`);
+      gradient.addColorStop(1, 'rgba(168, 85, 247, 0)');
       ctx.strokeStyle = gradient;
       ctx.lineWidth = 2;
       ctx.beginPath();

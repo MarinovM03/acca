@@ -7,3 +7,37 @@
   z-index: -1;
   pointer-events: none;
 }
+
+/* A distant gas giant glowing in the lower-right. Pure CSS (a gradient sphere
+   plus an atmospheric glow); only its transform animates, so it composites on
+   the GPU and adds no per-frame canvas work. Stars draw in front of it. */
+.planet {
+  position: fixed;
+  right: clamp(-300px, -12vw, -160px);
+  bottom: clamp(-320px, -14vw, -180px);
+  width: clamp(240px, 32vw, 430px);
+  height: clamp(240px, 32vw, 430px);
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Mostly-dark body with a faint lit edge so it reads as a distant world,
+     not a bright disc. */
+  background: radial-gradient(circle at 30% 28%, #7e52c0 0%, #45286f 32%, #221440 58%, #0c0720 82%);
+  box-shadow:
+    inset -40px -34px 84px rgba(0, 0, 0, 0.72),
+    0 0 90px rgba(120, 70, 220, 0.18);
+  opacity: 0.7;
+  animation: planet-drift 120s ease-in-out infinite alternate;
+}
+
+@keyframes planet-drift {
+  to {
+    transform: translate3d(-26px, -18px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planet {
+    animation: none;
+  }
+}
