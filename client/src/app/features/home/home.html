@@ -37,32 +37,86 @@
   </section>
 
   <section class="dash-grid">
-    <a class="dash" routerLink="/launches">
-      <span class="dash__label">Next launch</span>
+    <a class="dash dash--launch" routerLink="/launches">
+      <span class="dash__glow" aria-hidden="true"></span>
+      <span class="dash__head">
+        <span class="dash__icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+            />
+            <path
+              d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+            />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </svg>
+        </span>
+        <span class="dash__section">Launches</span>
+        <span class="dash__arrow" aria-hidden="true">→</span>
+      </span>
       @if (launchLoading()) {
-        <app-skeleton width="80%" height="1.1rem" />
-        <app-skeleton width="50%" height="1.8rem" />
+        <span class="dash__body">
+          <app-skeleton width="70%" height="1.9rem" />
+          <app-skeleton width="50%" height="0.9rem" />
+        </span>
       } @else if (nextLaunch(); as launch) {
-        <span class="dash__title">{{ launch.name }}</span>
-        <span class="dash__big"><app-countdown [target]="launch.net" /></span>
-        <span class="dash__meta">{{ launch.provider ?? 'Unknown provider' }}</span>
+        <span class="dash__body">
+          <span class="dash__value"><app-countdown [target]="launch.net" /></span>
+          <span class="dash__meta">{{ launch.name }}</span>
+        </span>
       } @else {
-        <span class="dash__title">See upcoming launches →</span>
+        <span class="dash__body">
+          <span class="dash__value dash__value--muted">No upcoming launch</span>
+        </span>
       }
     </a>
 
-    <a class="dash" routerLink="/asteroids">
-      <span class="dash__label">Near-Earth asteroids · 7 days</span>
+    <a class="dash dash--asteroids" routerLink="/asteroids">
+      <span class="dash__glow" aria-hidden="true"></span>
+      <span class="dash__head">
+        <span class="dash__icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <circle cx="19" cy="5" r="2" />
+            <circle cx="5" cy="19" r="2" />
+            <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416" />
+            <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416" />
+          </svg>
+        </span>
+        <span class="dash__section">Asteroids</span>
+        <span class="dash__arrow" aria-hidden="true">→</span>
+      </span>
       @if (asteroidLoading()) {
-        <app-skeleton width="40%" height="2.2rem" />
-        <app-skeleton width="65%" height="1rem" />
+        <span class="dash__body">
+          <app-skeleton width="35%" height="1.9rem" />
+          <app-skeleton width="65%" height="0.9rem" />
+        </span>
       } @else if (asteroidStats(); as stats) {
-        <span class="dash__big">{{ stats.total }}</span>
-        <span class="dash__meta">
-          <span class="dash__haz">{{ stats.hazardous }}</span> potentially hazardous
+        <span class="dash__body">
+          <span class="dash__value">{{ stats.total }}</span>
+          <span class="dash__meta">
+            near-Earth · 7 days · <span class="dash__haz">{{ stats.hazardous }} hazardous</span>
+          </span>
         </span>
       } @else {
-        <span class="dash__title">See the asteroid feed →</span>
+        <span class="dash__body">
+          <span class="dash__value dash__value--muted">View feed</span>
+        </span>
       }
     </a>
 
@@ -77,16 +131,42 @@
             decoding="async"
           />
         </span>
-        <span class="dash__bg-scrim"></span>
-      }
-      <span class="dash__label">Latest from Mars</span>
-      @if (marsLoading()) {
-        <app-skeleton width="50%" height="1.6rem" />
-      } @else if (latestMars(); as photo) {
-        <span class="dash__title">Sol {{ photo.sol }}</span>
-        <span class="dash__meta">{{ photo.camera }}</span>
+        <span class="dash__bg-scrim" aria-hidden="true"></span>
       } @else {
-        <span class="dash__title">Browse Mars photos →</span>
+        <span class="dash__glow" aria-hidden="true"></span>
+      }
+      <span class="dash__head">
+        <span class="dash__icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </svg>
+        </span>
+        <span class="dash__section">Mars</span>
+        <span class="dash__arrow" aria-hidden="true">→</span>
+      </span>
+      @if (marsLoading()) {
+        <span class="dash__body">
+          <app-skeleton width="40%" height="1.9rem" />
+          <app-skeleton width="55%" height="0.9rem" />
+        </span>
+      } @else if (latestMars(); as photo) {
+        <span class="dash__body">
+          <span class="dash__value">Sol {{ photo.sol }}</span>
+          <span class="dash__meta">{{ photo.camera }}</span>
+        </span>
+      } @else {
+        <span class="dash__body">
+          <span class="dash__value dash__value--muted">Browse photos</span>
+        </span>
       }
     </a>
   </section>

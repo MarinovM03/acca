@@ -93,8 +93,8 @@ describe('Home', () => {
     const text = fixture.nativeElement.textContent ?? '';
     expect(text).toContain('The Hydra Cluster of Galaxies');
     expect(text).toContain('Falcon 9 | Starlink');
-    expect(text).toContain('Next launch');
-    expect(text).toContain('potentially hazardous');
+    expect(text).toContain('Launches');
+    expect(text).toContain('hazardous');
     expect(text).toContain('Sol 1882');
   });
 
@@ -104,6 +104,6 @@ describe('Home', () => {
     await settle(fixture);
 
     const haz = fixture.nativeElement.querySelector('.dash__haz');
-    expect(haz?.textContent?.trim()).toBe('1');
+    expect(haz?.textContent?.trim()).toBe('1 hazardous');
   });
 });
